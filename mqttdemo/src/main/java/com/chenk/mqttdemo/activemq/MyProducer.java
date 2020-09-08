@@ -23,7 +23,7 @@ public class MyProducer {
         // 创建会话
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         // 创建队列目标,并标识队列名称，消费者根据队列名称接收数据
-        Destination destination = session.createQueue("myQueue");
+        Destination destination = session.createTopic("myQueue");
         // 创建一个生产者
         MessageProducer producer = session.createProducer(destination);
         // 向队列推送10个文本消息数据

@@ -23,7 +23,7 @@
     }
 
     // WebSocket 连接字符串
-    const WebSocket_URL = 'ws://144.76.229.236:9001/mqtt'
+    const WebSocket_URL = 'ws://127.0.0.1:61614/mqtt'
 
     // TCP/TLS 连接字符串，仅限 Node.js 环境
     // const TCP_URL = 'mqtt://localhost:1883'
@@ -53,9 +53,9 @@
         })
 
         // 发布消息
-        client.publish('hello', 'Hello EMQ X', (err) => {
-            console.log(err || '发布成功')
-        })
+        //client.publish('hello', 'Hello EMQ X', (err) => {
+        //  console.log(err || '发布成功')
+        //})
 
     })
     // 为 message 时间添加处理函数
@@ -65,7 +65,42 @@
         // 断开连接
         //client.end()
     })
-</script>
 
+    function send() {
+        var s = document.getElementById("msg").value;
+        var topic = document.getElementById("topic").value;
+        if (s) {
+            s = "[{time:" + new Date().Format("yyyy-MM-dd hh:mm:ss") + ", content:" + (s) + ", from: web console}]";
+            //message = new Paho.MQTT.Message(s);
+            //message.destinationName = topic;
+            client.publish(topic, s, (err) => {
+                console.log(err || '发布成功')
+            })
+            document.getElementById("msg").value = "";
+        }
+    }
+
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[
+                k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+</script>
+topic:<input type="text" id="topic"/>
+msg:<input type="text" id="msg"/>
+<input type="button" value="Send" onclick="send()"/>
+<input type="button" value="Start" onclick="start()"/>
+<input type="button" value="Stop" onclick="stop()"/>
 </body>
 </html>
