@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MQTT</title>
+</head>
+<body>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script>
+    // 连接选项
+    const options = {
+        // 超时时间
+        connectTimeout: 4000,
+
+        // 认证信息
+        clientId: 'emqx',
+        username: 'ty',
+        password: '123456',
+
+        // 心跳时间
+        keepalive: 60,
+        clean: true,
+    }
+
+    // WebSocket 连接字符串
+    const WebSocket_URL = 'ws://144.76.229.236:9001/mqtt'
+
+    // TCP/TLS 连接字符串，仅限 Node.js 环境
+    // const TCP_URL = 'mqtt://localhost:1883'
+    // const TCP_TLS_URL = 'mqtts://localhost:8883'
+
+    const client = mqtt.connect(WebSocket_URL, options)
+
+    client.on('connect', () => {
+        console.log('连接成功')
+    })
+
+    client.on('reconnect', (error) => {
+        console.log('正在重连:', error)
+    })
+
+    client.on('error', (error) => {
+        console.log('连接失败:', error)
+    })
+
+    // 连接成功后初始化订阅
+    client.on('connect', () => {
+        console.log('Connected to', WebSocket_URL)
+
+        // 订阅主题
+        client.subscribe('hello', (err) => {
+            console.log(err || '订阅成功')
+        })
+
+        // 发布消息
+        client.publish('hello', 'Hello EMQ X', (err) => {
+            console.log(err || '发布成功')
+        })
+
+    })
+    // 为 message 时间添加处理函数
+    client.on('message', (topic, message) => {
+        console.log('收到来自', topic, '的消息:', message.toString())
+
+        // 断开连接
+        //client.end()
+    })
+</script>
+
+</body>
+</html>
