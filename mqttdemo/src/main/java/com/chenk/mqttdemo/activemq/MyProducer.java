@@ -27,7 +27,7 @@ public class MyProducer {
         // 创建一个生产者
         MessageProducer producer = session.createProducer(destination);
         // 向队列推送10个文本消息数据
-        for (int i = 1 ; i <= 10 ; i++){
+        for (int i = 1; i <= 10; i++) {
             // 创建文本消息
             TextMessage message = session.createTextMessage("第" + i + "个文本消息");
             //发送消息
@@ -35,7 +35,9 @@ public class MyProducer {
             //在本地打印消息
             System.out.println("已发送的消息：" + message.getText());
         }
-        //关闭连接
+        //关闭资源
+        producer.close();
+        session.close();
         connection.close();
     }
 

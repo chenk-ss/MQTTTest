@@ -3,6 +3,7 @@ package com.chenk.mqttdemo.activemq;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
+import java.io.IOException;
 
 /**
  * @Author chenk
@@ -11,7 +12,7 @@ import javax.jms.*;
 public class MyConsumer {
     private static final String ACTIVEMQ_URL = "tcp://127.0.0.1:61616";
 
-    public static void main(String[] args) throws JMSException {
+    public static void main(String[] args) throws JMSException, IOException {
         // 创建连接工厂
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(ACTIVEMQ_URL);
         // 创建连接
@@ -47,5 +48,10 @@ public class MyConsumer {
                 }
             }
         });
+        System.in.read();
+        //关闭资源
+        consumer.close();
+        session.close();
+        connection.close();
     }
 }
