@@ -17,6 +17,7 @@ public class Producer {
 
     private String TOPIC;
 
+    //
     private void connect() {
         // new mqttConnection 用来设置一些连接的属性
         MqttConnectOptions options = new MqttConnectOptions();
