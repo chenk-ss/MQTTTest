@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"/>
+    <script>
+        import mqtt from "mqtt";
+        console.log('1111');
+        console.log(mqtt);
+        // <script src="https://unpkg.com/mqtt/dist/mqtt.min.js">
+        // const mqtt = require("mqtt");
+        // WebSocket 连接字符串
+        //const WebSocket_URL = "ws://127.0.0.1:8083/mqtt";
+        // TCP/TLS 连接字符串，仅限 Node.js 环境
+        const TCP_URL = "mqtt://127.0.0.1:1883";
+        //const TCP_TLS_URL = "mqtts://127.0.0.1:8883";
+        // 连接选项
+        const options = {
+            // 超时时间
+            connectTimeout: 4000,
+            // 认证信息
+            clientId: "admin",
+            username: "admin",
+            password: 'admin',
+            // 心跳时间
+            keepalive: 60,
+            clean: true
+        };
+        const client = mqtt.connect(TCP_URL, options);
+        // 连接成功后初始化订阅
+        client.on("connect", () => {
+            console.log("Connected to", TCP_URL);
+            // 订阅主题
+            client.subscribe("gczd/+/data", err => {
+                console.log(err || "订阅成功");
+            });
+        });
+        // 为 message 时间添加处理函数
+        client.on("message", (topic, message) => {
+            console.log("收到来自", topic, "的消息:", message.toString());
+        });
+        export default {
+            name: "App"
+        };
+    </script>
+</head>
+<body>
+
+</body>
+</html>

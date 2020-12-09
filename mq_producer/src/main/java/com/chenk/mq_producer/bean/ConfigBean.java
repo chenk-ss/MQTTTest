@@ -15,8 +15,8 @@ import javax.jms.Queue;
 @Component
 @EnableJms
 public class ConfigBean {
-    @Value("${myqueue}")
-    private String muQueue;
+//    @Value("${myqueue}")
+    private String muQueue = "boot-activemq-queue";
 
     @Bean
     public Queue queue(){
